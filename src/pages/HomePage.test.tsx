@@ -36,7 +36,7 @@ describe('HomePage', () => {
     await user.click(screen.getByRole('button', { name: /Покупка квартиры в Москве/ }));
     await user.click(screen.getByRole('button', { name: 'Смотреть объявления' }));
     expect(screen.getByRole('dialog')).toHaveAccessibleName('Объявление');
-    await user.click(screen.getByRole('button', { name: 'Связаться с продавцом' }));
+    await user.click(screen.getByRole('button', { name: 'Связаться с застройщиком' }));
     expect(screen.getByRole('dialog')).toHaveAccessibleName('Заявка отправлена');
   });
 

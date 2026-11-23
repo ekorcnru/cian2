@@ -14,7 +14,7 @@ const screens: Screen[] = [
   { title: 'Поиск', subtitle: 'Город, район или метро', step: 'search_open', content: 'search' },
   { title: 'Выдача', subtitle: 'Квартиры в Москве', step: 'results_open', content: 'results' },
   { title: 'Объявление', subtitle: '2-комн. квартира, 54 м²', step: 'listing_open', content: 'listing' },
-  { title: 'Заявка', subtitle: 'Контакт с продавцом', step: 'contact_submitted', content: 'contact' },
+  { title: 'Заявка', subtitle: 'Контакт с застройщиком', step: 'contact_submitted', content: 'contact' },
 ];
 
 function ScreenPreview({ content }: Pick<Screen, 'content'>) {
@@ -45,7 +45,7 @@ export function MapPage() {
       <section className={s.intro} aria-labelledby="map-title">
         <p className={s.eyebrow}>ПРОТОТИП · HOME SCENARIO</p>
         <h1 id="map-title">Карта сценария поиска квартиры</h1>
-        <p>Основной путь возвращающегося пользователя: от главной до заявки продавцу. На карточках — просмотр экрана, на переходах — цель Метрики, которая срабатывает при действии.</p>
+        <p>Основной путь возвращающегося пользователя: от главной до заявки застройщику. На карточках — просмотр экрана, на переходах — цель Метрики, которая срабатывает при действии.</p>
         <p className={s.counter}>Яндекс Метрика: счётчик-заглушка <strong>№ {METRIKA_COUNTER_ID}</strong></p>
       </section>
 
@@ -80,9 +80,9 @@ export function MapPage() {
           <span className={s.status}>К запуску</span>
         </div>
         <div className={s.abGrid}>
-          <article><h3>Гипотеза</h3><p>Если сделать продолжение сохранённого поиска главным действием на главной, возвращающиеся пользователи чаще дойдут до контакта с продавцом.</p></article>
+          <article><h3>Гипотеза</h3><p>Если сделать продолжение сохранённого поиска главным действием на главной, возвращающиеся пользователи чаще дойдут до контакта с застройщиком.</p></article>
           <article><h3>Вариант B</h3><p>Вместо нейтрального первого экрана показываем блок «Продолжить поиск» с сохранёнными параметрами и ближайшими рекомендациями. Вариант A — текущая главная без этого акцента.</p></article>
-          <article><h3>Основная метрика</h3><p><strong>Contact conversion</strong> — доля пользователей, отправивших заявку продавцу в течение сессии.</p></article>
+          <article><h3>Основная метрика</h3><p><strong>Contact conversion</strong> — доля пользователей, отправивших заявку застройщику в течение сессии.</p></article>
           <article><h3>Ограничивающая метрика</h3><p><strong>Search-to-listing rate</strong> не должен снизиться больше чем на 1 п.п.: акцент не должен уводить пользователей от просмотра объявлений.</p></article>
           <article><h3>Размер выборки</h3><p><strong>22 000 пользователей</strong>: по 11 000 в вариантах A и B. Этого достаточно, чтобы заметить рост contact conversion с 6% до 7% при α = 5% и мощности 80%.</p></article>
           <article><h3>Длительность</h3><p><strong>Минимум 14 дней</strong> и до набора 11 000 пользователей в каждой группе — чтобы захватить полный недельный цикл.</p></article>

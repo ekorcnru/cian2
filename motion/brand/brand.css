@@ -1,0 +1,15 @@
+/* Cian brand profile extracted from public/reference/tokens and HomePage styles. */
+@font-face{font-family:'Cian Lato';src:url(fonts/lato-regular.woff2) format('woff2');font-weight:400;font-style:normal;font-display:block}
+@font-face{font-family:'Cian Lato';src:url(fonts/lato-semibold.woff2) format('woff2');font-weight:600;font-style:normal;font-display:block}
+@font-face{font-family:'Cian Lato';src:url(fonts/lato-bold.woff2) format('woff2');font-weight:700;font-style:normal;font-display:block}
+
+:root{
+  --font:'Cian Lato',Arial,sans-serif;
+  --w-regular:400; --w-medium:600; --w-bold:700;
+  --accent:#006CFD; --accent-ink:#FFFFFF;
+  --ink:#0D162E; --ink2:#697797; --ink3:#A0ACCA;
+  --line:#E1E6F4; --line2:#D0D8E9; --soft:#F3F5FA;
+  --dark:#0D162E; --surface:#FFFFFF; --bg:#EEF2F8;
+  --dim:13,22,46; --sub-bg:rgba(13,22,46,.86); --cursor:#0D162E;
+  --r-app:20px; --ring-stops:#006CFD,#2178FD,#68A4FF,#006CFD;
+}
