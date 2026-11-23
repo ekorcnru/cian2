@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Продолжить поиск · Циан</title>
+  <link rel="stylesheet" href="brand/brand.css">
+  <style>
+    * { box-sizing: border-box; }
+    html, body, #app { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #eef2f8; }
+    #app { position: relative; font-family: var(--font); }
+    .full { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transform-origin:50% 50%; will-change:transform,filter; }
+    #dim { position:absolute; inset:0; z-index:2; background:rgba(13,22,46,.54); opacity:0; }
+    .modal { position:absolute; z-index:3; overflow:hidden; border-radius:24px; transform-origin:50% 50%; opacity:0; box-shadow:0 28px 80px rgba(13,22,46,.24); will-change:transform,opacity,clip-path; }
+    .modal img { position:absolute; width:1920px; height:1080px; max-width:none; }
+    #results { left:672px; top:294px; width:576px; height:493px; }
+    #results img, #listing img { left:-672px; top:-294px; }
+    #listing { left:672px; top:294px; width:576px; height:493px; }
+    #contact { left:672px; top:375px; width:576px; height:331px; }
+    #contact img { left:-672px; top:-375px; }
+    #flash { position:absolute; inset:0; z-index:5; background:#fff; pointer-events:none; opacity:0; }
+    #cursor { position:absolute; z-index:7; width:42px; height:54px; filter:drop-shadow(0 4px 5px rgba(13,22,46,.33)); transform-origin:8px 8px; }
+    #cursor::before { content:''; display:block; width:0; height:0; border-top:36px solid #0d162e; border-right:22px solid transparent; }
+    #cursor::after { content:''; position:absolute; left:5px; top:5px; width:0; height:0; border-top:26px solid white; border-right:15px solid transparent; }
+    #pulse { position:absolute; z-index:6; width:18px; height:18px; border:3px solid #006cfd; border-radius:50%; opacity:0; transform:translate(-50%,-50%) scale(.2); }
+  </style>
+</head>
+<body>
+  <main id="app">
+    <img id="home" class="full" src="assets/01-home.png" alt="">
+    <div id="dim"></div>
+    <section id="results" class="modal"><img src="assets/02-results.png" alt=""></section>
+    <section id="listing" class="modal"><img src="assets/03-listing.png" alt=""></section>
+    <section id="contact" class="modal"><img src="assets/04-contact.png" alt=""></section>
+    <i id="pulse"></i><i id="cursor"></i><i id="flash"></i>
+  </main>
+  <script src="plan.js"></script>
+  <script>
+    window.DURATION = 15; window.FPS = 30;
+    const $ = id => document.getElementById(id);
+    const clamp = n => Math.max(0, Math.min(1, n));
+    const out = n => { n = clamp(n); return 1 - Math.pow(1 - n, 3); };
+    const io = n => { n = clamp(n); return n < .5 ? 4*n*n*n : 1 - Math.pow(-2*n+2,3)/2; };
+    const p = (t,a,b,curve=out) => curve((t-a)/(b-a));
+    const lerp = (a,b,n) => a + (b-a)*n;
+    function modal(id, value, y, scale) {
+      const el = $(id); el.style.opacity = value.toFixed(3);
+      el.style.transform = `translateY(${y}px) scale(${scale})`;
+    }
+    function press(t, at, x, y) {
+      const q = Math.exp(-Math.pow((t-at)/.11,2));
+      $('cursor').style.left = `${x}px`; $('cursor').style.top = `${y}px`;
+      $('cursor').style.transform = `scale(${1-q*.17})`;
+      const ring = clamp(1-Math.abs(t-at)/.4);
+      const pulse = $('pulse'); pulse.style.left=`${x+7}px`; pulse.style.top=`${y+8}px`;
+      pulse.style.opacity=ring.toFixed(3); pulse.style.transform=`translate(-50%,-50%) scale(${.28+(1-ring)*3.6})`;
+    }
+    function render(t) {
+      const openResults = p(t,2.60,3.12), openListing = p(t,5.80,6.24), openContact = p(t,9.40,9.84);
+      const closeResults = p(t,5.58,5.92), closeListing = p(t,9.18,9.52);
+      const dim = Math.max(openResults*(1-openContact), openContact);
+      $('dim').style.opacity = (.54*dim).toFixed(3);
+      $('home').style.filter = `saturate(${1-.13*dim})`;
+      $('home').style.transform = `translate(${lerp(0,-20,p(t,0,2.6))}px,${lerp(0,9,p(t,0,2.6))}px) scale(${lerp(1.02,1.15,p(t,0,2.6))})`;
+      modal('results', openResults*(1-closeResults), lerp(116,0,openResults)+closeResults*-38, lerp(.86,1,openResults));
+      modal('listing', openListing*(1-closeListing), lerp(96,0,openListing)+closeListing*-38, lerp(.88,1,openListing));
+      modal('contact', openContact, lerp(72,0,openContact), lerp(.90,1,openContact));
+      const flash = Math.max(Math.exp(-Math.pow((t-2.60)/.08,2))*.16, Math.exp(-Math.pow((t-5.80)/.08,2))*.12, Math.exp(-Math.pow((t-9.40)/.08,2))*.15);
+      $('flash').style.opacity=flash.toFixed(3);
+      let x,y,at;
+      if(t<2.60){ const k=io((t-.25)/2.15); x=lerp(700,912,k); y=lerp(470,230,k); at=2.60; }
+      else if(t<5.80){ const k=io((t-3.18)/2.25); x=lerp(912,965,k); y=lerp(230,713,k); at=5.80; }
+      else if(t<9.40){ const k=io((t-6.30)/2.65); x=lerp(965,958,k); y=lerp(713,716,k); at=9.40; }
+      else { $('cursor').style.opacity=0; $('pulse').style.opacity=0; return; }
+      $('cursor').style.opacity=1; press(t,at,x,y);
+    }
+    const images = Array.from(document.images);
+    Promise.all(images.map(img => img.complete ? Promise.resolve() : new Promise(resolve => {img.onload=img.onerror=resolve;}))).then(() => { render(0); window.READY=true; });
+  </script>
+</body>
+</html>
